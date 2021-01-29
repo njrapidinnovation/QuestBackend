@@ -23,7 +23,7 @@ interface State {
 interface JwtDecoded {
 	payload: {
 		id: string;
-		publicAddress: string;
+		publickey: string;
 	};
 }
 
@@ -42,7 +42,7 @@ export class Profile extends React.Component<Props, State> {
 			payload: { id },
 		} = jwtDecode<JwtDecoded>(accessToken);
 
-		fetch(`${process.env.REACT_APP_BACKEND_URL}/users/${id}`, {
+		fetch(`${process.env.REACT_APP_BACKEND_URL}/${id}`, {
 			headers: {
 				Authorization: `Bearer ${accessToken}`,
 			},
@@ -95,7 +95,7 @@ export class Profile extends React.Component<Props, State> {
 			onLoggedOut,
 		} = this.props;
 		const {
-			payload: { publicAddress },
+			payload: { publickey },
 		} = jwtDecode<JwtDecoded>(accessToken);
 		const { loading, user } = this.state;
 
@@ -104,12 +104,12 @@ export class Profile extends React.Component<Props, State> {
 		return (
 			<div className="Profile">
 				<p>
-					Logged in as <Blockies seed={publicAddress} />
+					Logged in as <Blockies seed={publickey} />
 				</p>
 				<div>
 					My username is{' '}
 					{username ? <pre>{username}</pre> : 'not set.'} My
-					publicAddress is <pre>{publicAddress}</pre>
+					publickey is <pre>{publickey}</pre>
 				</div>
 				<div>
 					<label htmlFor="username">Change username: </label>

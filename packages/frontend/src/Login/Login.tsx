@@ -9,7 +9,7 @@ interface Props {
 	onLoggedIn: (auth: Auth) => void;
 }
 
-let web3: Web3 | undefined = undefined; // Will hold the web3 instance
+let web3: Web3; // Will hold the web3 instance
 
 export class Login extends React.Component<Props> {
 	state = {
@@ -17,14 +17,14 @@ export class Login extends React.Component<Props> {
 	};
 
 	handleAuthenticate = ({
-		publicAddress,
+		publickey,
 		signature,
 	}: {
-		publicAddress: string;
+		publickey: string;
 		signature: string;
 	}) =>
 		fetch(`${process.env.REACT_APP_BACKEND_URL}/auth`, {
-			body: JSON.stringify({ publicAddress, signature }),
+			body: JSON.stringify({ publickey, signature }),
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -35,7 +35,7 @@ export class Login extends React.Component<Props> {
 		const { onLoggedIn } = this.props;
 
 		// Check if MetaMask is installed
-		if (!(window as any).ethereum) {
+		if (!(window).ethereum) {
 			window.alert('Please install MetaMask first.');
 			return;
 		}
@@ -43,11 +43,11 @@ export class Login extends React.Component<Props> {
 		if (!web3) {
 			try {
 				// Request account access if needed
-				await (window as any).ethereum.enable();
+				await (window).ethereum.enable();
 
 				// We don't know window.web3 version, so we use our own instance of Web3
 				// with the injected provider given by MetaMask
-				web3 = new Web3((window as any).ethereum);
+				web3 = new Web3((window).ethereum);
 			} catch (error) {
 				window.alert('You need to allow MetaMask.');
 				return;
@@ -60,17 +60,17 @@ export class Login extends React.Component<Props> {
 			return;
 		}
 
-		const publicAddress = coinbase.toLowerCase();
+		const publickey = coinbase.toLowerCase();
 		this.setState({ loading: true });
 
-		// Look if user with current publicAddress is already present on backend
+		// Look if user with current publickey is already present on backend
 		fetch(
-			`${process.env.REACT_APP_BACKEND_URL}/users?publicAddress=${publicAddress}`
+			`${process.env.REACT_APP_BACKEND_URL}/${publickey}`
 		)
 			.then((response) => response.json())
 			// If yes, retrieve it. If no, create it.
 			.then((users) =>
-				users.length ? users[0] : this.handleSignup(publicAddress)
+				users.length ? users[0] : this.handleSignup(publickey)
 			)
 			// Popup MetaMask confirmation modal to sign message
 			.then(this.handleSignMessage)
@@ -85,20 +85,21 @@ export class Login extends React.Component<Props> {
 	};
 
 	handleSignMessage = async ({
-		publicAddress,
+		publickey,
 		nonce,
 	}: {
-		publicAddress: string;
+		publickey: string;
 		nonce: string;
 	}) => {
 		try {
-			const signature = await web3!.eth.personal.sign(
+			console.log(publickey+ " "+nonce);
+			const signature = await web3.eth.personal.sign(
 				`I am signing my one-time nonce: ${nonce}`,
-				publicAddress,
+				publickey,
 				'' // MetaMask will ignore the password argument here
 			);
 
-			return { publicAddress, signature };
+			return {publickey, signature };
 		} catch (err) {
 			throw new Error(
 				'You need to sign the message to be able to log in.'
@@ -106,9 +107,9 @@ export class Login extends React.Component<Props> {
 		}
 	};
 
-	handleSignup = (publicAddress: string) => {
-		return fetch(`${process.env.REACT_APP_BACKEND_URL}/users`, {
-			body: JSON.stringify({ publicAddress }),
+	handleSignup = (publickey: string) => {
+		return fetch(`${process.env.REACT_APP_BACKEND_URL}/add`, {
+			body: JSON.stringify({ publickey }),
 			headers: {
 				'Content-Type': 'application/json',
 			},
