@@ -7,7 +7,7 @@ import { UserModule } from './modules/user/user.module';
 import configuration from './config/configuration';
 import { UserController } from './modules/user/user.controller';
 import { UserService } from './modules/user/user.service';
-
+import { configService } from '../src/Services/config.service';
 
 @Module({
   imports: [
@@ -16,9 +16,7 @@ import { UserService } from './modules/user/user.service';
     // }),
     ConfigModule,
     UserModule,
-    // TypeOrmModule.forRoot({
-
-    // })
+    TypeOrmModule.forRoot(configService.getTypeORMConfig())
   ],
   controllers: [AppController,UserController],
   providers: [AppService,UserService],
