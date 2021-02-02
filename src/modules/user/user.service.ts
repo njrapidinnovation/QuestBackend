@@ -18,7 +18,7 @@ export class UserService {
         public readonly jwtService:JwtService
     ){}
 
-    async signUp({email,publicAddress}:userDto):Promise<MessageResponse>{
+    async signUp({email,publicAddress}:userDto):Promise<any>{
         try{
             const id = v4();
             var publicaddress= publicAddress;
@@ -43,7 +43,10 @@ export class UserService {
 
            await this.userNonceRepository.insert(usernonce);
            
-           return MessageResponse.Successfull;
+           return {
+               publicaddress:usernonce.publicaddress,
+               nonce:usernonce.nonce
+           };
 
             }
             else{
@@ -88,8 +91,14 @@ throw new BadRequestException(err.message);
     //Get Nonce for particular address
     async getNonce({publicaddress}:nonceDto):Promise<any>{
         let user = await getUserBy({publicaddress});
-        if(user && user.isActive == true)
-        return (await getUserNonceBy({publicaddress})).nonce;
+        if(user && user.isActive == true){
+            let user_nonce = getUserNonceBy({publicaddress});
+            return {
+                publicaddress:(await user_nonce).publicaddress,
+                nonce:(await user_nonce).nonce
+            }
+        }
+        
         else
         throw new BadRequestException("Currently User is not active")
 	}
