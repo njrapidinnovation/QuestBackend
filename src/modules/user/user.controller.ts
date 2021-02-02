@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { nonceDto, signatureDto, signUpResponse, userDto } from './user.dto';
 import { UserService } from './user.service';
@@ -40,13 +40,15 @@ export class UserController {
       return await this.userService.updateNonce(nonceDto)
    }
 
-   @Post('getNonce')
+   @Get('/:publicAddress')
    @HttpCode(HttpStatus.OK)
    @ApiOkResponse({description:"Get Nonce By Public Address"})
-   async getNonce(@Body() nonceDto:nonceDto){
-
-      return await this.userService.getNonce(nonceDto);
+   async getNonce(@Param('publicAddress') publicAddress:string){
+      let new_nonce:nonceDto;
+      new_nonce.publicaddress = publicAddress;
+      return await this.userService.getNonce(new_nonce);
    }
+
 
    @Post('getAuth')
    @HttpCode(HttpStatus.OK)
