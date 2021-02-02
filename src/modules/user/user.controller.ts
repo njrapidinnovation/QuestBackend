@@ -1,6 +1,6 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
-import { nonceDto, signUpResponse, userDto } from './user.dto';
+import { nonceDto, signatureDto, signUpResponse, userDto } from './user.dto';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -31,13 +31,29 @@ export class UserController {
     
 
    }
-
+   
    @Post('updateNonce')
    @HttpCode(HttpStatus.OK)
    @ApiOkResponse({type:signUpResponse, description:"Update nonce"})
    async updateNonce(@Body() nonceDto:nonceDto){
 
       return await this.userService.updateNonce(nonceDto)
+   }
+
+   @Post('getNonce')
+   @HttpCode(HttpStatus.OK)
+   @ApiOkResponse({description:"Get Nonce By Public Address"})
+   async getNonce(@Body() nonceDto:nonceDto){
+
+      return await this.userService.getNonce(nonceDto);
+   }
+
+   @Post('getAuth')
+   @HttpCode(HttpStatus.OK)
+   @ApiOkResponse({description:"Get JWT token by Address and Signature"})
+   async updateNone(@Body() signatureDto:signatureDto){
+
+      return await this.userService.auth(signatureDto);
    }
 
 

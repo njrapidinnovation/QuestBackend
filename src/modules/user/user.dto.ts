@@ -32,3 +32,13 @@ export class nonceDto{
     @IsString()
     publicaddress:string
 }
+
+export class signatureDto{
+    @ApiProperty()
+    @IsString()
+    publicaddress:string
+
+    @ApiProperty()
+    @IsString()
+    signature:string
+}
