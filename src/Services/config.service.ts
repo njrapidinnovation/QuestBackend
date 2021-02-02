@@ -33,13 +33,14 @@ class ConfigService {
       database: this.envConfig.TYPEORM_DATABASE,
       port: Number.parseInt(this.envConfig.TYPEORM_PORT, 10),
       logging: false,
+      synchronize:true,
       entities: [entitiesPath],
-      migrations: [migrationPath],
-      migrationsRun: this.envConfig.TYPEORM_MIGRATIONS_RUN === 'true',
-      cli: {
-        migrationsDir: 'src/db/migrations',
-        entitiesDir: 'src/db/entities',
-      },
+      // migrations: [migrationPath],
+      // migrationsRun: this.envConfig.TYPEORM_MIGRATIONS_RUN === 'true',
+      // cli: {
+      //   migrationsDir: 'src/db/migrations',
+      //   entitiesDir: 'src/db/entities',
+      // },
     };
   }
   /*

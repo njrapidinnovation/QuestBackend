@@ -1,10 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNumber, IsString } from 'class-validator';
+import { IsEmail, IsNumber, IsString, isUUID } from 'class-validator';
+import { isUuid } from 'uuidv4';
 import { MessageResponse } from './user.interface';
 
 
 
 export class userDto{
+
     @ApiProperty()
     @IsEmail()
     email:string
@@ -23,4 +25,10 @@ export class signUpResponse{
     @ApiProperty()
     @IsString()
     Message:string
+}
+
+export class nonceDto{
+    @ApiProperty()
+    @IsString()
+    publicaddress:string
 }

@@ -4,9 +4,11 @@ import { AppService } from './app.service';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import { ConfigModule } from './modules/config/config.module';
 import { UserModule } from './modules/user/user.module';
-import configuration from './config/configuration';
+// import configuration from './config/configuration';
 import { UserController } from './modules/user/user.controller';
 import { UserService } from './modules/user/user.service';
+import ConfigService from './Services/config.service';
+// import { UserRepository } from './modules/user/user.repository';
 
 
 @Module({
@@ -16,11 +18,14 @@ import { UserService } from './modules/user/user.service';
     // }),
     ConfigModule,
     UserModule,
-    // TypeOrmModule.forRoot({
-
-    // })
+    TypeOrmModule.forRootAsync({
+      // imports: [SharedModule],
+      useFactory: (configService: ConfigService) => configService.getTypeORMConfig(),
+      inject: [ConfigService],
+    }),
   ],
-  controllers: [AppController,UserController],
-  providers: [AppService,UserService],
+  controllers: [AppController],
+  providers: [AppService],
+  // exports:[UserService]
 })
 export class AppModule {}

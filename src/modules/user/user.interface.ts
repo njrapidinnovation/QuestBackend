@@ -10,3 +10,15 @@ export interface UserData{
     publicaddress:string,
     role:number
 }
+
+export enum Role{
+    HOAAdmin = 1,
+    General = 2,
+    Treasury = 3
+}
+
+export interface IuserNonce{
+    id:string,
+    publicaddress:string,
+    nonce:string
+}
