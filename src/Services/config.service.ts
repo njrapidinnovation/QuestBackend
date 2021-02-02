@@ -66,5 +66,8 @@ class ConfigService {
     return validatedEnvConfig;
   }
 }
+const baseDir = path.join(__dirname, '../');
+const configService = new ConfigService(`${baseDir}/env/${process.env.NODE_ENV || 'development'}.env`);
 
-export default ConfigService;
+
+export{ConfigService,configService};

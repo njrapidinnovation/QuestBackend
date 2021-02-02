@@ -1,0 +1,20 @@
+{
+  "type": "postgres",
+  "host": "127.0.0.1",
+  "username": "postgres",
+  "password": "postgres",
+  "database": "postgres",
+  "port": 5432,
+  "logging": false,
+  "entities": [
+    "D:\\work\\QuestBackedn\\src\\db/entities/*.entity{.ts,.js}"
+  ],
+  "migrations": [
+    "D:\\work\\QuestBackedn\\src\\db/migrations/*{.ts,.js}"
+  ],
+  "migrationsRun": false,
+  "cli": {
+    "migrationsDir": "src/db/migrations",
+    "entitiesDir": "src/db/entities"
+  }
+}
