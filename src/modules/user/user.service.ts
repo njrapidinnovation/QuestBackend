@@ -88,8 +88,8 @@ throw new BadRequestException(err.message);
     //Get Nonce for particular address
     async getNonce({publicaddress}:nonceDto):Promise<any>{
         let user = await getUserBy({publicaddress});
-        if(user.isActive == true)
-        return getUserNonceBy({publicaddress});
+        if(user && user.isActive == true)
+        return (await getUserNonceBy({publicaddress})).nonce;
         else
         throw new BadRequestException("Currently User is not active")
 	}
