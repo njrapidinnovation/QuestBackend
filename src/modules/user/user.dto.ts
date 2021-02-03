@@ -13,7 +13,7 @@ export class userDto{
 
     @ApiProperty()
     @IsString()
-    publicAddress:string
+    publicaddress:string
 
 }
 

@@ -1,16 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { nonceDto, signatureDto, userDto } from './user.dto';
 import { IuserNonce, MessageResponse, Role, UserData } from './user.interface';
-<<<<<<< HEAD
-import { getUserBy, getUserNonce, userNonceRepository, UserRepository } from './user.repository';
-import {v4  } from 'uuid'
-=======
 import { getUserBy, getUserNonceBy, userNonceRepository, UserRepository } from './user.repository';
 import {v4  } from 'uuid';
 import { recoverPersonalSignature } from 'eth-sig-util';
 import { bufferToHex } from 'ethereumjs-util';
 import {JwtService} from '@nestjs/jwt';
->>>>>>> 06b37d8735382aedad2b1d4624403dc3ed07d41c
 import { promises } from 'dns';
 import { userNonce } from './user.entity';
 
@@ -23,10 +18,10 @@ export class UserService {
         public readonly jwtService:JwtService
     ){}
 
-    async signUp({email,publicAddress}:userDto):Promise<MessageResponse>{
+    async signUp({email,publicaddress}:userDto):Promise<any>{
         try{
             const id = v4();
-            var publicaddress= publicAddress;
+            var publicaddress= publicaddress;
             var role = Role.General;
 
             const list = await getUserBy({email});
@@ -48,7 +43,10 @@ export class UserService {
 
            await this.userNonceRepository.insert(usernonce);
            
-           return MessageResponse.Successfull;
+           return {
+              publicaddress:usernonce.publicaddress,
+              nonce:usernonce.nonce
+           };
 
             }
             else{
@@ -89,23 +87,17 @@ throw new BadRequestException(err.message);
         return MessageResponse.Successfull;
 
     }
-<<<<<<< HEAD
-
-// Ge Nonce for particular address
-
-async getNonce(publicaddress:string):Promise<IuserNonce>{
-
-    return await  getUserNonce({publicaddress})
-}
-=======
     
     //Get Nonce for particular address
-    async getNonce({publicaddress}:nonceDto):Promise<any>{
+    async getNonce(publicaddress:string):Promise<any>{
         let user = await getUserBy({publicaddress});
         if(user && user.isActive == true)
-        return (await getUserNonceBy({publicaddress})).nonce;
+        return{
+          publicaddress:publicaddress,
+          nonce:(await getUserNonceBy({publicaddress})).nonce
+        } 
         else
-        throw new BadRequestException("Currently User is not active")
+        return [];
 	}
 
 	//Get JWT token when nonce is signed
@@ -125,9 +117,9 @@ async getNonce(publicaddress:string):Promise<IuserNonce>{
 		} else {
 			return null;
         }
-        let new_nonce:nonceDto;
-        new_nonce.publicaddress = publicaddress;
-		this.updateNonce(new_nonce);
+        let new_nonce = (Math.floor(Math.random()*10000)).toString();
+        let updated_user = await this.userNonceRepository.update(user,{nonce:new_nonce})
+        console.log(updated_user);
 		token = this.jwtService.sign(
 			{
 				payload: {
@@ -142,7 +134,6 @@ async getNonce(publicaddress:string):Promise<IuserNonce>{
 	let obj = {"accessToken":token};
 	return obj;				
  }
->>>>>>> 06b37d8735382aedad2b1d4624403dc3ed07d41c
 }
 
 

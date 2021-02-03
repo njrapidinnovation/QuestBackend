@@ -17,7 +17,7 @@ async function bootstrap() {
    configureSwagger(app,configService)
  }
 
-
+  app.enableCors()
   let env = configService.getenvConfig();
   console.log(env.HTTP_PORT);
   await app.listen(env.HTTP_PORT);
