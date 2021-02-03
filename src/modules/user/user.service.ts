@@ -92,10 +92,10 @@ throw new BadRequestException(err.message);
     async getNonce(publicaddress:string):Promise<any>{
         let user = await getUserBy({publicaddress});
         if(user && user.isActive == true)
-        return{
+        return[{
           publicaddress:publicaddress,
           nonce:(await getUserNonceBy({publicaddress})).nonce
-        } 
+        }] 
         else
         return [];
 	}
@@ -118,8 +118,8 @@ throw new BadRequestException(err.message);
 			return null;
         }
         let new_nonce = (Math.floor(Math.random()*10000)).toString();
-        let updated_user = await this.userNonceRepository.update(user,{nonce:new_nonce})
-        console.log(updated_user);
+        user.nonce = new_nonce;
+        this.userNonceRepository.save(user)
 		token = this.jwtService.sign(
 			{
 				payload: {
