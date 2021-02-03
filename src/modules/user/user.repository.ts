@@ -7,6 +7,8 @@ import { userEntity, userNonce } from './user.entity';
 export const getUserBy = getSingleBy(userEntity);
 export const getUserNonce = getSingleBy(userNonce);
 
+export const getUserNonceBy = getSingleBy(userNonce)
+
 @EntityRepository(userEntity)
 export class UserRepository extends Repository<userEntity>{}
 
