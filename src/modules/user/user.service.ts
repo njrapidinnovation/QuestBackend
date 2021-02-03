@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { nonceDto, userDto } from './user.dto';
 import { IuserNonce, MessageResponse, Role, UserData } from './user.interface';
-import { getUserBy, userNonceRepository, UserRepository } from './user.repository';
+import { getUserBy, getUserNonce, userNonceRepository, UserRepository } from './user.repository';
 import {v4  } from 'uuid'
 import { promises } from 'dns';
 
@@ -83,6 +83,13 @@ throw new BadRequestException(err.message);
         return MessageResponse.Successfull
 
     }
+
+// Ge Nonce for particular address
+
+async getNonce(publicaddress:string):Promise<IuserNonce>{
+
+    return await  getUserNonce({publicaddress})
+}
 }
 
 

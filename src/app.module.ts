@@ -10,6 +10,7 @@ import { UserService } from './modules/user/user.service';
 import { ConfigService } from './Services/config.service';
 // import ConfigService from './Services/config.service';
 // import { UserRepository } from './modules/user/user.repository';
+import { PropertiesModule } from './modules/properties/properties.module';
 
 
 @Module({
@@ -24,6 +25,7 @@ import { ConfigService } from './Services/config.service';
       useFactory: (configService: ConfigService) => configService.getTypeORMConfig(),
       inject: [ConfigService],
     }),
+    PropertiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,5 +1,5 @@
 import { CreatedModified } from "src/helper";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { ForeignKeyMetadata } from "typeorm/metadata/ForeignKeyMetadata";
 import { UserData,IuserNonce } from "./user.interface";
 
@@ -10,10 +10,11 @@ export class userEntity extends CreatedModified implements UserData{
 @Column({nullable: false})
 id:string
 
-@PrimaryColumn()
+@Column()
 email:string
 
-@Column()
+// @OneToMany(() => userNonce,(nonce:userNonce)=> nonce.nonce)
+@PrimaryColumn()
 publicaddress:string
 
 @Column()
@@ -21,6 +22,11 @@ role:number
 
 @Column({default:true})
 isActive:boolean
+
+// @OneToMany(() => userNonce,(nonce:userNonce)=> nonce.publicaddress)
+// usernonce:string
+
+
 }
 
 // This the entity for the storing the nonce
@@ -32,8 +38,9 @@ export class userNonce extends CreatedModified implements IuserNonce {
 
     @Column()
     nonce:string
-
-    @OneToMany(() => userEntity,(user:userEntity)=> user.publicaddress)
+    
+    @ManyToOne(() => userEntity,(user:userEntity)=> user.publicaddress)
+    @JoinColumn()
     publicaddress:string
 
 }

@@ -10,7 +10,6 @@ export function getSingleBy<T = any>(table: ObjectType<T> | EntitySchema<T>):(fi
 
 
 
-
 export abstract class CreatedModified{
     @CreateDateColumn()
     CreatedAt :Date

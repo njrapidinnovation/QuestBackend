@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { nonceDto, signUpResponse, userDto } from './user.dto';
 import { UserService } from './user.service';
@@ -40,5 +40,12 @@ export class UserController {
       return await this.userService.updateNonce(nonceDto)
    }
 
+   @Get('GetNonce/:publicaddress')
+   @HttpCode(HttpStatus.OK)
+   @ApiOkResponse()
+async getnonce(@Param('publicaddress') publicaddress:string){
+// var nonce:nonceDto = "0x4355663773eeee"
+   return await this.userService.getNonce(publicaddress)
+}
 
 }
